@@ -20,9 +20,9 @@ namespace Vaelith
 namespace std
 {
 	template<>
-	struct hash<Engine::UUID>
+	struct hash<Vaelith::UUID>
 	{
-		size_t operator()(const Engine::UUID& uuid) const noexcept
+		size_t operator()(const Vaelith::UUID& uuid) const noexcept
 		{
 			return hash<uint64_t>{}(static_cast<uint64_t>(uuid));
 		}

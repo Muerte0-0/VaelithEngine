@@ -14,3 +14,10 @@
 	path = Vendor/bkaradzic/bimg
 	url = https://github.com/bkaradzic/bimg.git
 	branch = master
+[submodule "Vendor/spdlog"]
+	path = Vendor/spdlog
+	url = https://github.com/gabime/spdlog.git
+	branch = v2.x
+[submodule "vendor/GLM"]
+	path = vendor/GLM
+	url = https://github.com/g-truc/glm.git

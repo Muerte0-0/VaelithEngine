@@ -16,6 +16,19 @@ files {
 	"Source/**.cpp",
 }
 
+externalincludedirs {
+	"%{IncludeDir.spdlog}",
+	"%{wks.location}/Engine/Source",
+	"%{wks.location}/Vendor/",
+	"%{IncludeDir.GLFW}",
+	"%{IncludeDir.GLM}",
+}
+
+links {
+	"Engine",
+	"GLFW",
+}
+
 filter "system:windows"
 	systemversion "latest"
 

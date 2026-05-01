@@ -5,7 +5,7 @@ namespace Vaelith
 {
 	static bool s_GLFWInitialized = false;
 
-	WindowsWindow::WindowsWindow(const WindowProps& props) : m_Data(props)
+	WindowsWindow::WindowsWindow(const WindowSpecification& props) : m_Data(props)
 	{
 		Init(props);
 	}
@@ -20,7 +20,7 @@ namespace Vaelith
 		glfwPollEvents();
 	}
 
-	void WindowsWindow::Init(const WindowProps& props)
+	void WindowsWindow::Init(const WindowSpecification& props)
 	{
 		if (!s_GLFWInitialized)
 		{
@@ -38,11 +38,14 @@ namespace Vaelith
 			nullptr
 		);
 
-		std::cout << "Created Windows window: " << m_Data.Title << "\n";
+		LOG(LogLevel::Info,"Created Window: {}", m_Data.Title);
 	}
 
 	void WindowsWindow::Shutdown()
 	{
 		glfwDestroyWindow(m_Window);
 	}
+
+	void WindowsWindow::RaiseEvent(Event& event)
+	{}
 }

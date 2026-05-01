@@ -55,3 +55,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <stdexcept>
+
+#include "Engine/Core/Base.h"
+#include "Engine/Debugging/Log.h"
+#include "Engine/Debugging/Assert.h"

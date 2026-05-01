@@ -40,9 +40,11 @@ files {
 includedirs {
 	"Source",
 	"%{IncludeDir.GLFW}",
+	"%{IncludeDir.GLM}",
 	"%{IncludeDir.BGFX}",
 	"%{IncludeDir.BX}",
 	"%{IncludeDir.BIMG}",
+	"%{IncludeDir.spdlog}",
 }
 
 links {

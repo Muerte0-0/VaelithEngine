@@ -13,13 +13,13 @@
 
 namespace Vaelith
 {
-	Window* Window::Create (const WindowProps& props)
+	Ref<Window> Window::Create(const WindowSpecification& props)
 	{
 #ifdef PLATFORM_WINDOWS
-		return new WindowsWindow(props);
+		return CreateRef<WindowsWindow>(props);
 #endif
 #ifdef PLATFORM_LINUX
-		return new LinuxWindow (props);
+		return CreateRef<LinuxWindow>(props);
 #endif
 	}
 }

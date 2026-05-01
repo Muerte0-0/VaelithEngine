@@ -54,9 +54,11 @@ ThirdParty = "%{wks.location}/Vendor"
 IncludeDir = {}
 IncludeDir["Vulkan"] = "%{VULKAN_SDK}/include"
 IncludeDir["GLFW"] = "%{ThirdParty}/GLFW/include"
+IncludeDir["GLM"] = "%{ThirdParty}/GLM"
 IncludeDir["bx"] = "%{ThirdParty}/bkaradzic/bx/include"
 IncludeDir["bimg"] = "%{ThirdParty}/bkaradzic/bimg/include"
 IncludeDir["BGFX"] = "%{ThirdParty}/bkaradzic/bgfx/include"
+IncludeDir["spdlog"] = "%{ThirdParty}/spdlog/include"
 
 LibraryDir = {}
 LibraryDir["VulkanSDK"] = "%{VULKAN_SDK}/Lib"
