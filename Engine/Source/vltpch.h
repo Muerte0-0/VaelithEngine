@@ -5,6 +5,16 @@
 // Do not add files here that you will be updating frequently as this negates the performance advantage.
 #pragma once
 
+#include "Engine/Core/PlatformDetection.h"
+
+#ifdef PLATFORM_WINDOWS
+#include <windows.h>
+#include <commdlg.h>
+#undef APIENTRY
+#else
+#include <unistd.h>
+#endif
+
 // Core
 #include <cstdint>
 #include <cstddef>

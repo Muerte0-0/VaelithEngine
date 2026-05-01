@@ -1,7 +1,7 @@
 @echo off
 
 pushd ..
-Vendor\Premake\Windows\premake5.exe --file=VaelithEngine.lua vs2022
+Vendor\Premake\Windows\premake5.exe --file=VaelithEngine.lua vs2026
 
 popd
 PAUSE

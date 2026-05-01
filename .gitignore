@@ -407,3 +407,4 @@ FodyWeavers.xsd
 *.filters
 Makefile
 *.sln
+*.slnx
