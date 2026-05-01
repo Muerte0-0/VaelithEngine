@@ -1,0 +1,16 @@
+[submodule "Vendor/GLFW"]
+	path = Vendor/GLFW
+	url = https://github.com/Muerte0-0/glfw-premake.git
+	branch = master
+[submodule "Vendor/bkaradzic/bgfx"]
+	path = Vendor/bkaradzic/bgfx
+	url = https://github.com/bkaradzic/bgfx.git
+	branch = master
+[submodule "Vendor/bkaradzic/bx"]
+	path = Vendor/bkaradzic/bx
+	url = https://github.com/bkaradzic/bx.git
+	branch = master
+[submodule "Vendor/bkaradzic/bimg"]
+	path = Vendor/bkaradzic/bimg
+	url = https://github.com/bkaradzic/bimg.git
+	branch = master
