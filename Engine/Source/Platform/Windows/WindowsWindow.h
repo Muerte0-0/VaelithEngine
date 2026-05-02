@@ -13,7 +13,7 @@ namespace Vaelith
 		WindowsWindow(const WindowSpecification& props);
 		virtual ~WindowsWindow();
 
-		void OnUpdate() override;
+		void OnUpdate(Timestep deltaTime) override;
 
 		uint32_t GetWidth() const override { return m_Data.Width; }
 		uint32_t GetHeight() const override { return m_Data.Height; }
@@ -24,7 +24,6 @@ namespace Vaelith
 		void SetVSync(bool enabled) override { m_Data.VSync = enabled; }
 		bool IsVSync() const override { return m_Data.VSync; }
 
-		void RaiseEvent(Event& event) override;
 		bool ShouldClose() const override { return glfwWindowShouldClose(m_Window) != 0; }
 
 	private:

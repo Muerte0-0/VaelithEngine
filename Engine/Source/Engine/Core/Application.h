@@ -5,6 +5,8 @@
 #include "Engine/Events/Event.h"
 #include "Engine/Events/WindowEvents.h"
 
+#include "Engine/ImGui/ImGuiLayer.h"
+
 #include <filesystem>
 
 namespace Vaelith
@@ -67,7 +69,7 @@ namespace Vaelith
 		Ref<Window> m_Window;
 
 		std::vector<Scope<Layer>> m_LayerStack;
-		//Scope<ImGuiLayer> m_ImGuiLayer;
+		Scope<ImGuiLayer> m_ImGuiLayer;
 
 		bool m_IsMinimized = false;
 

@@ -1,5 +1,6 @@
 #include "vltpch.h"
 #include "WindowsWindow.h"
+#include "Engine/Events/WindowEvents.h"
 
 namespace Vaelith
 {
@@ -15,7 +16,7 @@ namespace Vaelith
 		Shutdown();
 	}
 
-	void WindowsWindow::OnUpdate()
+	void WindowsWindow::OnUpdate(Timestep deltaTime)
 	{
 		glfwPollEvents();
 	}
@@ -38,6 +39,22 @@ namespace Vaelith
 			nullptr
 		);
 
+		// Store pointer to m_Data so the callback can reach it without capturing
+		glfwSetWindowUserPointer(m_Window, &m_Data);
+
+		glfwSetFramebufferSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
+		{
+			auto& data = *static_cast<WindowSpecification*>(glfwGetWindowUserPointer(window));
+			data.Width  = static_cast<uint32_t>(width);
+			data.Height = static_cast<uint32_t>(height);
+
+			if (data.EventCallback)
+			{
+				WindowResizeEvent event(data.Width, data.Height);
+				data.EventCallback(event);
+			}
+		});
+
 		LOG(LogLevel::Info,"Created Window: {}", m_Data.Title);
 	}
 
@@ -45,7 +62,4 @@ namespace Vaelith
 	{
 		glfwDestroyWindow(m_Window);
 	}
-
-	void WindowsWindow::RaiseEvent(Event& event)
-	{}
 }

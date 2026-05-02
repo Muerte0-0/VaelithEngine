@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "Engine/Renderer/Renderer.h"
 
+#include <imgui.h>
 #include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
@@ -49,6 +50,9 @@ namespace Vaelith
 
 		Renderer::Init(config);
 
+		m_ImGuiLayer = CreateScope<ImGuiLayer>();
+		m_ImGuiLayer->OnAttach();
+
 		for (auto& layer : m_LayerStack)
 			layer->OnAttach();
     }
@@ -57,10 +61,12 @@ namespace Vaelith
     {
 		Renderer::Shutdown();
 
-		m_Window = nullptr;
+		m_ImGuiLayer->OnDetach();
 
         for (auto& layer : std::views::reverse(m_LayerStack))
             layer->OnDetach();
+
+		m_Window = nullptr;
 
         glfwTerminate();
     }
@@ -83,7 +89,7 @@ namespace Vaelith
 			}
 
 			const float currentTime = static_cast<float>(glfwGetTime());
-			const float deltaTime = glm::clamp(currentTime - lastTime, MIN_DELTA_TIME, MAX_DELTA_TIME);
+			const Timestep deltaTime = glm::clamp(currentTime - lastTime, MIN_DELTA_TIME, MAX_DELTA_TIME);
 			lastTime = currentTime;
 
 			accumulator += deltaTime;
@@ -93,7 +99,7 @@ namespace Vaelith
 			{
 				if (!m_IsMinimized)
 				{
-					//m_ImGuiLayer->OnFixedUpdate(FIXED_FRAME_TIME);
+					m_ImGuiLayer->OnFixedUpdate(FIXED_FRAME_TIME);
 
 					for (const auto& layer : m_LayerStack)
 						layer->OnFixedUpdate(FIXED_FRAME_TIME);
@@ -104,8 +110,9 @@ namespace Vaelith
 			// Per-frame update
 			if (!m_IsMinimized)
 			{
-				//m_ImGuiLayer->OnUpdate(deltaTime);
+				m_ImGuiLayer->OnUpdate(deltaTime);
 				std::vector<Layer*> layers;
+
 				layers.reserve(m_LayerStack.size());
 				for (const auto& l : m_LayerStack)
 					layers.push_back(l.get());
@@ -115,20 +122,22 @@ namespace Vaelith
 				for (const auto& layer : m_LayerStack)
 					layer->OnRender();
 
-				//m_ImGuiLayer->OnRender();
+				m_ImGuiLayer->OnRender();
 
-				//m_ImGuiLayer->Begin(deltaTime);
+				m_ImGuiLayer->Begin();
 				
-				//m_ImGuiLayer->OnImGuiRender();
+				m_ImGuiLayer->OnImGuiRender();
 
 				for (const auto& layer : m_LayerStack)
 					layer->OnImGuiRender();
 				
-				//m_ImGuiLayer->End();
+				m_ImGuiLayer->End();
 
 				Renderer::EndFrame();
 
-				m_Window->OnUpdate();
+				m_ImGuiLayer->FlushWindowOps();
+
+				m_Window->OnUpdate(deltaTime);
 			}
 
 			const float sleepTime = FIXED_FRAME_TIME - (GetTime() - currentTime);
@@ -148,9 +157,7 @@ namespace Vaelith
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(&Application::OnWindowResize));
 		dispatcher.Dispatch<WindowClosedEvent>(BIND_EVENT_FN(&Application::OnWindowClosed));
 		
-		//m_ImGuiLayer->OnEvent(event);
-
-		m_Window->RaiseEvent(event);
+		m_ImGuiLayer->OnEvent(event);
 
 		if (event.Handled)
 			return;
@@ -175,7 +182,19 @@ namespace Vaelith
 
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
-		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+		const uint32_t w = e.GetWidth();
+		const uint32_t h = e.GetHeight();
+
+		if (w == 0 || h == 0)
+		{
+			m_IsMinimized = true;
+			return false;
+		}
+
+		m_IsMinimized = false;
+		Renderer::OnWindowResize(w, h);
+
+		ImGui::GetIO().DisplaySize = ImVec2(static_cast<float>(w), static_cast<float>(h));
 
 		return false;
 	}
@@ -184,6 +203,6 @@ namespace Vaelith
 	{
 		Stop();
 
-		return false;
+		return true;
 	}
 }

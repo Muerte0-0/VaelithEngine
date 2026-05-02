@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/Events/Event.h"
+#include "Engine/Core/Timestep.h"
 
 #include <string>
 #include <functional>
@@ -37,7 +38,7 @@ namespace Vaelith
 	public:
 		virtual ~Window() = default;
 
-		virtual void OnUpdate() = 0;
+		virtual void OnUpdate(Timestep deltaTime) = 0;
 
 		virtual uint32_t GetWidth() const = 0;
 		virtual uint32_t GetHeight() const = 0;
@@ -47,8 +48,6 @@ namespace Vaelith
 
 		virtual void SetVSync(bool enabled) = 0;
 		virtual bool IsVSync() const = 0;
-
-		virtual void RaiseEvent(Event& event) = 0;
 
 		virtual bool ShouldClose() const = 0;
 

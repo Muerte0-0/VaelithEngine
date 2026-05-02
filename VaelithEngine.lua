@@ -42,6 +42,7 @@ group ""
 group "ThirdParty"
 	include "Vendor/GLFW/Build-GLFW.lua"
 	include "Vendor/bkaradzic/Build-BGFX.lua"
+	include "Vendor/UI/Editor/Build-ImGui.lua"
 group ""
 
 group "Misc"

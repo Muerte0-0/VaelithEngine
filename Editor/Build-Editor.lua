@@ -22,11 +22,13 @@ externalincludedirs {
 	"%{wks.location}/Vendor/",
 	"%{IncludeDir.GLFW}",
 	"%{IncludeDir.GLM}",
+	"%{IncludeDir.ImGui}",
 }
 
 links {
 	"Engine",
 	"GLFW",
+	"ImGui",
 }
 
 filter "system:windows"

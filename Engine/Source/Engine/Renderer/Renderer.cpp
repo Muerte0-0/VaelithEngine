@@ -4,40 +4,52 @@
 
 namespace Vaelith
 {
-    void Renderer::Init(const RendererConfig& config)
-    {
-        bgfx::Init init;
+	void Renderer::Init(const RendererConfig& config)
+	{
+		bgfx::Init init;
 
-        init.type = bgfx::RendererType::Vulkan;
-        init.platformData.nwh = config.NativeWindowHandle;
+		init.type = bgfx::RendererType::Vulkan;
+		init.platformData.nwh = config.NativeWindowHandle;
+		init.platformData.ndt = GetModuleHandle(nullptr);
 
-        init.resolution.width = config.Width;
-        init.resolution.height = config.Height;
-        init.resolution.reset = config.VSync ? BGFX_RESET_VSYNC : BGFX_RESET_NONE;
+		init.resolution.width = config.Width;
+		init.resolution.height = config.Height;
+		init.resolution.reset = config.VSync ? BGFX_RESET_VSYNC : BGFX_RESET_NONE;
 
-        bgfx::init(init);
+		bgfx::init(init);
 
-        bgfx::setDebug(BGFX_DEBUG_TEXT);
-        RenderCommand::Clear(RenderView::Main, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff);
+		bgfx::setDebug(BGFX_DEBUG_TEXT);
+		RenderCommand::Clear(MAINPASS_VIEW_ID, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff);
 
 		RenderCommand::Init();
-    }
+	}
 
-    void Renderer::Shutdown()
-    {}
+	void Renderer::Shutdown()
+	{}
 
-    void Renderer::BeginFrame()
-    {
-        bgfx::touch(0);
-    }
+	void Renderer::BeginFrame()
+	{
+		RenderCommand::Clear(MAINPASS_VIEW_ID, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff);
+		RenderCommand::Clear(UIPASS_VIEW_ID,   BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x00000000);
+		bgfx::touch(0);
+	}
 
-    void Renderer::EndFrame()
-    {
+	void Renderer::EndFrame()
+	{
 		bgfx::frame();
-    }
+	}
 
-    void Renderer::OnWindowResize(uint32_t width, uint32_t height)
-    {
-		RenderCommand::SetViewport(RenderView::Main, 0, 0, width, height);
-    }
+	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
+	{
+		if (width == 0 || height == 0)
+			return;
+
+		bgfx::reset(width, height, BGFX_RESET_VSYNC);
+
+		// Update all forward-allocated view rects to the new dimensions
+		RenderCommand::SetViewport(SHADOWPASS_VIEW_ID,     0, 0, width, height);
+		RenderCommand::SetViewport(MAINPASS_VIEW_ID,       0, 0, width, height);
+		RenderCommand::SetViewport(POSTPROCESS_VIEW_ID,    0, 0, width, height);
+		RenderCommand::SetViewport(UIPASS_VIEW_ID,         0, 0, width, height);
+	}
 }

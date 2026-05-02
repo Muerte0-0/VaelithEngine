@@ -21,3 +21,7 @@
 [submodule "vendor/GLM"]
 	path = vendor/GLM
 	url = https://github.com/g-truc/glm.git
+[submodule "Vendor/UI/Editor/ImGui"]
+	path = Vendor/UI/Editor/ImGui
+	url = https://github.com/ocornut/imgui.git
+	branch = docking

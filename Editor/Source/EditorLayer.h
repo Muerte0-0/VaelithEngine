@@ -1,5 +1,5 @@
 #pragma once
-#include "Engine/Core/Layer.h"
+#include "Engine.h"
 
 namespace Vaelith
 {
@@ -12,8 +12,8 @@ namespace Vaelith
 		void OnAttach() override;
 		void OnDetach() override;
 
-		void OnUpdate(float DeltaTime) override;
-		void OnFixedUpdate(float DeltaTime) override;
+		void OnUpdate(Timestep DeltaTime) override;
+		void OnFixedUpdate(Timestep DeltaTime) override;
 
 		void OnRender() override;
 		void OnImGuiRender() override;

@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Base.h"
-#include <Engine/Events/Event.h>
+#include "Engine/Core/Timestep.h"
+#include "Engine/Events/Event.h"
 
 namespace Vaelith
 {
@@ -17,8 +18,8 @@ namespace Vaelith
 		
 		virtual void OnEvent(Event& event) {}
 		
-		virtual void OnUpdate(float deltaTime) {}
-		virtual void OnFixedUpdate(float deltaTime) {}
+		virtual void OnUpdate(Timestep deltaTime) {}
+		virtual void OnFixedUpdate(Timestep deltaTime) {}
 
 		virtual void OnRender() {}
 		virtual void OnImGuiRender() {}

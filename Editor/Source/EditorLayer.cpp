@@ -6,9 +6,9 @@ namespace Vaelith
 	{}
 	void EditorLayer::OnDetach()
 	{}
-	void EditorLayer::OnUpdate(float DeltaTime)
+	void EditorLayer::OnUpdate(Timestep DeltaTime)
 	{}
-	void EditorLayer::OnFixedUpdate(float DeltaTime)
+	void EditorLayer::OnFixedUpdate(Timestep DeltaTime)
 	{}
 	void EditorLayer::OnRender()
 	{}

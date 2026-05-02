@@ -27,6 +27,7 @@ filter {}
 
 defines {
 	"_CRT_SECURE_NO_WARNINGS",
+	"NOMINMAX",
 }
 
 files {
@@ -41,17 +42,19 @@ includedirs {
 	"Source",
 	"%{IncludeDir.GLFW}",
 	"%{IncludeDir.GLM}",
-	"%{IncludeDir.BGFX}",
-	"%{IncludeDir.BX}",
-	"%{IncludeDir.BIMG}",
+	"%{IncludeDir.ImGui}",
+	"%{IncludeDir.bx}",
+	"%{IncludeDir.bimg}",
+	"%{IncludeDir.bgfx}",
 	"%{IncludeDir.spdlog}",
 }
 
 links {
 	"GLFW",
-	"bgfx",
+	"ImGui",
 	"bx",
 	"bimg",
+	"bgfx",
 }
 
 filter "system:windows"
@@ -78,16 +81,16 @@ links {
 }
 
 filter "configurations:Debug"
-	defines "DEBUG"
+	defines { "DEBUG", "BX_CONFIG_DEBUG=1" }
 	runtime "Debug"
 	symbols "on"
 
 filter "configurations:Release"
-	defines "RELEASE"
+	defines { "RELEASE", "BX_CONFIG_DEBUG=0" }
 	runtime "Release"
 	optimize "on"
 
 filter "configurations:Dist"
-	defines "DIST"
+	defines { "DIST", "BX_CONFIG_DEBUG=0" }
 	runtime "Release"
 	optimize "on"

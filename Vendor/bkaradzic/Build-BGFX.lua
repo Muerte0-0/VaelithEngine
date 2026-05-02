@@ -1,7 +1,3 @@
-local BGFX_DIR = "bgfx"
-local BIMG_DIR = "bimg"
-local BX_DIR   = "bx"
-
 -- =========================================================
 -- bx compatibility
 -- =========================================================
@@ -37,21 +33,21 @@ defines { "__STDC_FORMAT_MACROS" }
 
 files
 {
-    path.join(BX_DIR, "include/bx/*.h"),
-    path.join(BX_DIR, "include/bx/inline/*.inl"),
-    path.join(BX_DIR, "src/*.cpp"),
+    "bx/include/bx/*.h",
+	"bx/include/bx/inline/*.inl",
+    "bx/src/*.cpp",
 }
 
 excludes
 {
-    path.join(BX_DIR, "src/amalgamated.cpp"),
-    path.join(BX_DIR, "src/crtnone.cpp"),
+	"bx/src/amalgamated.cpp",
+    "bx/src/crtnone.cpp",
 }
 
 includedirs
 {
-    path.join(BX_DIR, "include"),
-    path.join(BX_DIR, "3rdparty")
+    "bx/include",
+    "bx/3rdparty",
 }
 
 filter "configurations:Debug"
@@ -64,6 +60,7 @@ filter "configurations:Release or configurations:Dist"
 
 filter "action:vs*"
     defines { "_CRT_SECURE_NO_WARNINGS" }
+	includedirs { "bx/include/compat/msvc", }
 
 setBxCompat()
 
@@ -83,20 +80,20 @@ objdir (ThirdPartyIntDir)
 
 files
 {
-    path.join(BIMG_DIR, "include/bimg/*.h"),
-    path.join(BIMG_DIR, "src/image.cpp"),
-    path.join(BIMG_DIR, "src/image_gnf.cpp"),
-    path.join(BIMG_DIR, "src/*.h"),
-    path.join(BIMG_DIR, "3rdparty/astc-encoder/**.cpp"),
-    path.join(BIMG_DIR, "3rdparty/astc-encoder/**.h"),
+    "bimg/include/bimg/*.h",
+    "bimg/src/image.cpp",
+    "bimg/src/image_gnf.cpp",
+    "bimg/src/*.h",
+    "bimg/3rdparty/astc-encoder/**.cpp",
+    "bimg/3rdparty/astc-encoder/**.h",
 }
 
 includedirs
 {
-    path.join(BX_DIR, "include"),
-    path.join(BIMG_DIR, "include"),
-    path.join(BIMG_DIR, "3rdparty/astc-encoder"),
-    path.join(BIMG_DIR, "3rdparty/astc-encoder/include"),
+	"bx/include",
+    "bimg/include",
+    "bimg/3rdparty/astc-encoder",
+    "bimg/3rdparty/astc-encoder/include",
 }
 
 links { "bx" }
@@ -111,7 +108,6 @@ filter "configurations:Release or configurations:Dist"
 
 filter "action:vs*"
     defines { "_CRT_SECURE_NO_WARNINGS" }
-
 
 setBxCompat()
 
@@ -132,29 +128,28 @@ objdir (ThirdPartyIntDir)
 defines
 {
     "__STDC_FORMAT_MACROS",
-    "BGFX_CONFIG_RENDERER_VULKAN=1" -- change later if needed
 }
 
 files
 {
-    path.join(BGFX_DIR, "include/bgfx/**.h"),
-    path.join(BGFX_DIR, "src/*.cpp"),
-    path.join(BGFX_DIR, "src/*.h")
+    "bgfx/include/**.h",
+    "bgfx/src/*.cpp",
+    "bgfx/src/*.h",
 }
 
 excludes
 {
-    path.join(BGFX_DIR, "src/amalgamated.cpp")
+    "bgfx/src/amalgamated.cpp"
 }
 
 includedirs
 {
-    path.join(BGFX_DIR, "include"),
-    path.join(BIMG_DIR, "include"),
-    path.join(BX_DIR, "include"),
-    path.join(BGFX_DIR, "3rdparty"),
-    path.join(BGFX_DIR, "3rdparty/khronos"),
-    path.join(BGFX_DIR, "3rdparty/dxsdk/include"),
+    "bx/include",
+    "bimg/include",
+    "bgfx/include",
+    "bgfx/3rdparty",
+    "bgfx/3rdparty/khronos",
+    "bgfx/3rdparty/dxsdk/include",
 }
 
 links { "bimg", "bx" }
@@ -171,8 +166,8 @@ filter "action:vs*"
     defines { "_CRT_SECURE_NO_WARNINGS" }
     excludes
     {
-        path.join(BGFX_DIR, "src/glcontext_glx.cpp"),
-        path.join(BGFX_DIR, "src/glcontext_egl.cpp"),
+        "bgfx/src/glcontext_glx.cpp",
+        "bgfx/src/glcontext_egl.cpp",
     }
 	
 filter "system:windows"
@@ -186,6 +181,6 @@ filter "system:windows"
     }
 
 filter "system:macosx"
-    files { path.join(BGFX_DIR, "src/*.mm") }
+    files { "bgfx/src/*.mm", }
 
 setBxCompat()
