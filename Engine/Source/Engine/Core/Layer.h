@@ -1,9 +1,6 @@
 ﻿#pragma once
 #include "Base.h"
-//#include <Engine/Events/Event.h>
-
-#include <string>
-#include <functional>
+#include <Engine/Events/Event.h>
 
 namespace Vaelith
 {
@@ -18,7 +15,7 @@ namespace Vaelith
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
 		
-		//virtual void OnEvent(Event& event) {}
+		virtual void OnEvent(Event& event) {}
 		
 		virtual void OnUpdate(float deltaTime) {}
 		virtual void OnFixedUpdate(float deltaTime) {}

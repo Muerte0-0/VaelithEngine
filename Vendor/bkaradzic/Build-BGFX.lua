@@ -87,8 +87,8 @@ files
     path.join(BIMG_DIR, "src/image.cpp"),
     path.join(BIMG_DIR, "src/image_gnf.cpp"),
     path.join(BIMG_DIR, "src/*.h"),
-    path.join(BIMG_DIR, "3rdparty/astc-encoder/src/decoder/*.cc"),
-    path.join(BIMG_DIR, "3rdparty/astc-encoder/include/astcenc.h"),
+    path.join(BIMG_DIR, "3rdparty/astc-encoder/**.cpp"),
+    path.join(BIMG_DIR, "3rdparty/astc-encoder/**.h"),
 }
 
 includedirs

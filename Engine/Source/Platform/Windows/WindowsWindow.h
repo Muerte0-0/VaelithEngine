@@ -1,6 +1,10 @@
 #pragma once
 #include "Engine/Core/Window.h"
 
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
+
 namespace Vaelith
 {
 	class WindowsWindow : public Window
@@ -15,7 +19,7 @@ namespace Vaelith
 		uint32_t GetHeight() const override { return m_Data.Height; }
 
 		GLFWwindow* GetHandle() const override { return m_Window; }
-		void* GetNativeWindow() const override { return m_Window; }
+		void* GetNativeWindow() const override { return glfwGetWin32Window(m_Window); }
 
 		void SetVSync(bool enabled) override { m_Data.VSync = enabled; }
 		bool IsVSync() const override { return m_Data.VSync; }

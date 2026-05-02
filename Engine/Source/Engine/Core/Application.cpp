@@ -1,5 +1,6 @@
 #include "vltpch.h"
 #include "Application.h"
+#include "Engine/Renderer/Renderer.h"
 
 #include <GLFW/glfw3.h>
 
@@ -39,11 +40,22 @@ namespace Vaelith
         spec.EventCallback = [this](Event& event) { RaiseEvent(event); };
 
         m_Window = Window::Create(spec);
+
+		RendererConfig config;
+		config.NativeWindowHandle = m_Window->GetNativeWindow();
+		config.Width = m_Window->GetWidth();
+		config.Height = m_Window->GetHeight();
+		config.VSync = m_Window->IsVSync();
+
+		Renderer::Init(config);
+
+		for (auto& layer : m_LayerStack)
+			layer->OnAttach();
     }
 
     void Application::Shutdown()
     {
-		Stop();
+		Renderer::Shutdown();
 
 		m_Window = nullptr;
 
@@ -98,7 +110,7 @@ namespace Vaelith
 				for (const auto& l : m_LayerStack)
 					layers.push_back(l.get());
 
-				//Renderer::BeginScene();
+				Renderer::BeginFrame();
 
 				for (const auto& layer : m_LayerStack)
 					layer->OnRender();
@@ -106,16 +118,15 @@ namespace Vaelith
 				//m_ImGuiLayer->OnRender();
 
 				//m_ImGuiLayer->Begin(deltaTime);
-
-				//Renderer::DrawFrame();
 				
 				//m_ImGuiLayer->OnImGuiRender();
 
 				for (const auto& layer : m_LayerStack)
 					layer->OnImGuiRender();
 				
-
 				//m_ImGuiLayer->End();
+
+				Renderer::EndFrame();
 
 				m_Window->OnUpdate();
 			}
@@ -132,10 +143,47 @@ namespace Vaelith
     }
 
 	void Application::RaiseEvent(Event& event)
-	{}
+	{
+		EventDispatcher dispatcher(event);
+		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(&Application::OnWindowResize));
+		dispatcher.Dispatch<WindowClosedEvent>(BIND_EVENT_FN(&Application::OnWindowClosed));
+		
+		//m_ImGuiLayer->OnEvent(event);
+
+		m_Window->RaiseEvent(event);
+
+		if (event.Handled)
+			return;
+
+		for (auto& layer : std::views::reverse(m_LayerStack))
+		{
+			layer->OnEvent(event);
+			if (event.Handled)
+				break;
+		}
+	}
+
+	Application& Application::Get()
+	{
+		return *s_Application;
+	}
 
 	float Application::GetTime()
 	{
-		return glfwGetTime();
+		return static_cast<float>(glfwGetTime());
+	}
+
+	bool Application::OnWindowResize(WindowResizeEvent& e)
+	{
+		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+
+		return false;
+	}
+
+	bool Application::OnWindowClosed(WindowClosedEvent& e)
+	{
+		Stop();
+
+		return false;
 	}
 }

@@ -2,7 +2,7 @@
 #include "Engine/Core/EntryPoint.h"
 // ----------------------------- //
 
-//#include "EditorLayer.h"
+#include "EditorLayer.h"
 
 namespace Vaelith
 {
@@ -12,7 +12,7 @@ namespace Vaelith
 	public:
 		Editor()
 		{
-			//PushLayer<EditorLayer>();
+			PushLayer<EditorLayer>();
 		}
 
 		ApplicationSpecification GetApplicationSpecs() const override

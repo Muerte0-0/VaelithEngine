@@ -1,10 +1,10 @@
 #pragma once
 #include "Engine/Events/Event.h"
 
-#include <GLFW/glfw3.h>
-
 #include <string>
 #include <functional>
+
+struct GLFWwindow;
 
 namespace Vaelith
 {
