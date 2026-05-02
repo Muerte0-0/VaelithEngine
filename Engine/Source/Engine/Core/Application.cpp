@@ -154,6 +154,7 @@ namespace Vaelith
 	void Application::RaiseEvent(Event& event)
 	{
 		EventDispatcher dispatcher(event);
+
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(&Application::OnWindowResize));
 		dispatcher.Dispatch<WindowClosedEvent>(BIND_EVENT_FN(&Application::OnWindowClosed));
 		

@@ -1,6 +1,8 @@
 #include "vltpch.h"
 #include "WindowsWindow.h"
+
 #include "Engine/Events/WindowEvents.h"
+#include "Engine/Events/InputEvents.h"
 
 namespace Vaelith
 {
@@ -54,6 +56,84 @@ namespace Vaelith
 				data.EventCallback(event);
 			}
 		});
+
+		// ---------------------------------------------------------------
+		// GLFW callbacks
+		// ---------------------------------------------------------------
+
+		if (m_Data.EventCallback)
+		{
+			glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* handle)
+			{
+				auto& data = *static_cast<WindowSpecification*>(glfwGetWindowUserPointer(handle));
+				WindowClosedEvent event;
+				data.EventCallback(event);
+			});
+
+			glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* handle, int width, int height)
+			{
+				auto& data = *static_cast<WindowSpecification*>(glfwGetWindowUserPointer(handle));
+				WindowResizeEvent event(static_cast<uint32_t>(width), static_cast<uint32_t>(height));
+				data.EventCallback(event);
+			});
+
+			glfwSetKeyCallback(m_Window, [](GLFWwindow* handle, int key, int /*scancode*/, int action, int /*mods*/)
+			{
+				auto& data = *static_cast<WindowSpecification*>(glfwGetWindowUserPointer(handle));
+				switch (action)
+				{
+					case GLFW_PRESS:
+					case GLFW_REPEAT:
+					{
+						KeyPressedEvent event(key, action == GLFW_REPEAT);
+						data.EventCallback(event);
+						break;
+					}
+					case GLFW_RELEASE:
+					{
+						KeyReleasedEvent event(key);
+						data.EventCallback(event);
+						break;
+					}
+					default: break;
+				}
+			});
+
+			glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* handle, int button, int action, int /*mods*/)
+			{
+				auto& data = *static_cast<WindowSpecification*>(glfwGetWindowUserPointer(handle));
+				switch (action)
+				{
+					case GLFW_PRESS:
+					{
+						MouseButtonPressedEvent event(button);
+						data.EventCallback(event);
+						break;
+					}
+					case GLFW_RELEASE:
+					{
+						MouseButtonReleasedEvent event(button);
+						data.EventCallback(event);
+						break;
+					}
+					default: break;
+				}
+			});
+
+			glfwSetScrollCallback(m_Window, [](GLFWwindow* handle, double xOffset, double yOffset)
+			{
+				auto& data = *static_cast<WindowSpecification*>(glfwGetWindowUserPointer(handle));
+				MouseScrolledEvent event(xOffset, yOffset);
+				data.EventCallback(event);
+			});
+
+			glfwSetCursorPosCallback(m_Window, [](GLFWwindow* handle, double x, double y)
+			{
+				auto& data = *static_cast<WindowSpecification*>(glfwGetWindowUserPointer(handle));
+				MouseMovedEvent event(x, y);
+				data.EventCallback(event);
+			});
+		}
 
 		LOG(LogLevel::Info,"Created Window: {}", m_Data.Title);
 	}
