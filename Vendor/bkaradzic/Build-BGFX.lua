@@ -152,7 +152,7 @@ includedirs
     "bgfx/3rdparty/dxsdk/include",
 }
 
-links { "bimg", "bx" }
+links { "bimg", "bx", "%{Library.Vulkan}", }
 
 filter "configurations:Debug"
     defines { "BX_CONFIG_DEBUG=1" }
@@ -177,7 +177,10 @@ filter "system:windows"
         "user32",
         "kernel32",
         "psapi",
-		"%{Library.Vulkan}",
+		"d3d11",
+		"d3d12",
+		"dxgi",
+		"d3dcompiler",
     }
 
 filter "system:macosx"

@@ -6,17 +6,26 @@ namespace Vaelith
 {
 	void Renderer::Init(const RendererConfig& config)
 	{
-		bgfx::Init init;
+		bgfx::Init init{};
 
 		init.type = bgfx::RendererType::Vulkan;
 		init.platformData.nwh = config.NativeWindowHandle;
-		init.platformData.ndt = GetModuleHandle(nullptr);
+		init.platformData.ndt = nullptr;
 
 		init.resolution.width = config.Width;
 		init.resolution.height = config.Height;
 		init.resolution.reset = config.VSync ? BGFX_RESET_VSYNC : BGFX_RESET_NONE;
 
-		bgfx::init(init);
+#ifdef DEBUG
+		init.debug = true;
+		init.profile = true;
+#endif
+
+		if (!bgfx::init(init))
+		{
+			LOG(LogLevel::Error, "bgfx init failed!\n");
+			return;
+		}
 
 		bgfx::setDebug(BGFX_DEBUG_TEXT);
 		RenderCommand::Clear(MAINPASS_VIEW_ID, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff);
